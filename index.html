@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abigail Yin-Chun Chan — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F7F4EC;
+    --paper-deep: #EFEADC;
+    --ink: #201F1D;
+    --ink-soft: #5B564C;
+    --line: #DAD3C2;
+    --seal: #A63B2E;
+
+    --display: 'Shippori Mincho', serif;
+    --body: 'Zen Kaku Gothic New', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-weight:300;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--seal); color:var(--paper); }
+  :focus-visible{ outline:2px solid var(--seal); outline-offset:3px; }
+
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none; z-index:1; opacity:0.35;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0,0,0,0.015) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(0,0,0,0.015) 0%, transparent 50%);
+  }
+
+  .rail{ position:fixed; top:0; bottom:0; width:56px; display:flex; align-items:center; justify-content:center; z-index:5; pointer-events:none; }
+  .rail.left{ left:0; } .rail.right{ right:0; }
+  .rail span{ writing-mode:vertical-rl; font-family:var(--mono); font-size:0.68rem; letter-spacing:0.28em; color:var(--ink-soft); opacity:0.55; text-transform:uppercase; }
+  @media (max-width:900px){ .rail{ display:none; } }
+
+  nav{ position:fixed; top:0; left:0; right:0; z-index:10; display:flex; justify-content:space-between; align-items:center; padding:1.6rem 4rem; pointer-events:none; }
+  nav *{ pointer-events:auto; }
+  .nav-mark{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.15em; color:var(--ink-soft); }
+  .nav-links{ display:flex; gap:1.8rem; font-family:var(--mono); font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; flex-wrap:wrap; justify-content:flex-end; }
+  .nav-links a{ color:var(--ink-soft); position:relative; padding-bottom:2px; }
+  .nav-links a::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:1px; background:var(--seal); transform:scaleX(0); transform-origin:left; transition:transform 0.35s ease; }
+  .nav-links a:hover::after, .nav-links a:focus-visible::after{ transform:scaleX(1); }
+  @media (max-width:760px){ nav{ padding:1.2rem 1.6rem; } .nav-links{ display:none; } }
+  @media (min-width:1000px){ .nav-links{ flex-wrap:nowrap; } }
+  @media (min-width:900px){ .hero-name-row{ flex-wrap:nowrap; } }
+
+  .wrap{ max-width:860px; margin:0 auto; padding:0 1.6rem; position:relative; z-index:2; }
+
+  .hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-top:4rem; position:relative; overflow:hidden; }
+  .hero-canvas{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+  .hero-content{ position:relative; z-index:1; }
+  .hero-eyebrow{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.3em; color:var(--ink-soft); text-transform:uppercase; margin-bottom:1.6rem; opacity:0; animation:rise 0.9s 0.1s cubic-bezier(.2,.7,.2,1) forwards; }
+  .hero-name-row{ display:flex; align-items:flex-end; gap:1.2rem; flex-wrap:wrap; }
+  .hero h1{ font-family:var(--display); font-weight:600; font-size:clamp(2.4rem, 6.2vw, 4.4rem); line-height:1.05; letter-spacing:-0.01em; opacity:0; animation:rise 1s 0.25s cubic-bezier(.2,.7,.2,1) forwards; min-width:0; }
+  .hero h1 .cjk{ font-size:0.5em; color:var(--ink-soft); font-weight:500; margin-left:0.3em; }
+  .seal{ width:64px; height:64px; min-width:64px; border:1.5px solid var(--seal); color:var(--seal); display:flex; align-items:center; justify-content:center; font-family:var(--display); font-size:1.5rem; font-weight:700; border-radius:3px; transform:rotate(-3deg); opacity:0; animation:stamp 0.6s 0.9s cubic-bezier(.34,1.56,.64,1) forwards; flex-shrink:0; }
+  .hero-role{ margin-top:1.4rem; font-size:1.1rem; font-weight:300; color:var(--ink-soft); max-width:40ch; opacity:0; animation:rise 0.9s 0.45s cubic-bezier(.2,.7,.2,1) forwards; }
+  .hero-meta{ margin-top:3.2rem; display:flex; gap:2rem; flex-wrap:wrap; font-family:var(--mono); font-size:0.74rem; color:var(--ink-soft); opacity:0; animation:rise 0.9s 0.6s cubic-bezier(.2,.7,.2,1) forwards; }
+  .hero-meta a:hover{ color:var(--seal); }
+
+  .terminal{ margin-top:2.6rem; font-family:var(--mono); font-size:0.82rem; color:var(--ink-soft); min-height:1.4em; opacity:0; animation:rise 0.9s 0.78s cubic-bezier(.2,.7,.2,1) forwards; }
+  .terminal .prompt-text{ white-space:pre; }
+  .terminal .cursor{ display:inline-block; width:0.5em; height:1em; background:var(--seal); margin-left:2px; vertical-align:text-bottom; animation:blink 1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  @keyframes rise{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes stamp{ 0%{ opacity:0; transform:rotate(-3deg) scale(1.4); } 100%{ opacity:1; transform:rotate(-3deg) scale(1); } }
+
+  section{ padding:6rem 0; position:relative; }
+  section + section{ border-top:1px solid var(--line); }
+  .section-head{ display:flex; align-items:baseline; gap:1.1rem; margin-bottom:2.6rem; }
+  .glyph{ font-family:var(--display); font-size:1.5rem; color:var(--seal); line-height:1; }
+  .section-title{ font-family:var(--display); font-size:1.6rem; font-weight:600; letter-spacing:0.02em; }
+  .section-num{ margin-left:auto; font-family:var(--mono); font-size:0.72rem; color:var(--ink-soft); letter-spacing:0.1em; }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.8s cubic-bezier(.2,.7,.2,1), transform 0.8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  .about-text{ font-size:1.02rem; color:var(--ink-soft); max-width:62ch; }
+  .about-text strong{ color:var(--ink); font-weight:500; }
+
+  .entry{ display:grid; grid-template-columns:150px 1fr; gap:1.8rem; padding:2rem 0; }
+  .entry + .entry{ border-top:1px solid var(--line); }
+  .entry-date{ font-family:var(--mono); font-size:0.74rem; color:var(--ink-soft); letter-spacing:0.03em; padding-top:0.3rem; }
+  .entry-title{ font-family:var(--display); font-size:1.15rem; font-weight:600; margin-bottom:0.15rem; }
+  .entry-org{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:0.8rem; }
+  .entry ul{ list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+  .entry li{ position:relative; padding-left:1.1rem; font-size:0.95rem; color:var(--ink-soft); max-width:60ch; }
+  .entry li::before{ content:"—"; position:absolute; left:0; color:var(--seal); }
+  @media (max-width:600px){ .entry{ grid-template-columns:1fr; gap:0.5rem; } }
+
+  .skill-groups{ display:grid; grid-template-columns:repeat(2, 1fr); gap:2.6rem 3rem; }
+  @media (max-width:600px){ .skill-groups{ grid-template-columns:1fr; } }
+  .skill-group-label{ font-family:var(--mono); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:1rem; padding-bottom:0.6rem; border-bottom:1px solid var(--line); }
+  .skill-list{ display:flex; flex-direction:column; gap:0.55rem; font-size:0.95rem; color:var(--ink-soft); }
+  .skill-list span.hl{ color:var(--ink); }
+
+  .edu-item{ display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem; padding:1.8rem 0; }
+  .edu-item + .edu-item{ border-top:1px solid var(--line); }
+  .edu-degree{ font-family:var(--display); font-size:1.15rem; font-weight:600; }
+  .edu-school{ color:var(--ink-soft); font-size:0.95rem; margin-top:0.3rem; }
+  .edu-item ul{ list-style:none; margin-top:0.7rem; display:flex; flex-direction:column; gap:0.4rem; }
+  .edu-item li{ position:relative; padding-left:1.1rem; font-size:0.9rem; color:var(--ink-soft); }
+  .edu-item li::before{ content:"—"; position:absolute; left:0; color:var(--seal); }
+  .edu-date{ font-family:var(--mono); font-size:0.75rem; color:var(--ink-soft); white-space:nowrap; padding-top:0.3rem; }
+  @media (max-width:600px){ .edu-item{ flex-direction:column; gap:0.4rem; } }
+
+  /* awards — scroll accordion */
+  .award-group{ border-top:1px solid var(--line); }
+  .award-group:last-child{ border-bottom:1px solid var(--line); }
+  .award-group summary{
+    list-style:none; cursor:pointer; padding:1.5rem 0; display:flex; align-items:center; gap:1rem;
+    font-family:var(--display); font-size:1.05rem; font-weight:600;
+  }
+  .award-group summary::-webkit-details-marker{ display:none; }
+  .award-group summary .count{ margin-left:auto; font-family:var(--mono); font-size:0.7rem; color:var(--ink-soft); font-weight:400; }
+  .award-group summary .plus{ color:var(--seal); font-family:var(--mono); font-size:0.9rem; transition:transform 0.3s ease; }
+  .award-group[open] summary .plus{ transform:rotate(45deg); }
+  .award-body{ padding:0 0 2rem 0; }
+  .award-row{ display:flex; gap:1rem; padding:0.85rem 0; border-top:1px solid var(--paper-deep); align-items:baseline; }
+  .award-row:first-child{ border-top:none; }
+  .award-name{ font-size:0.94rem; }
+  .award-detail{ font-size:0.85rem; color:var(--ink-soft); margin-top:0.15rem; }
+  .award-meta{ margin-left:auto; font-family:var(--mono); font-size:0.72rem; color:var(--ink-soft); white-space:nowrap; }
+
+  footer{ padding:6rem 0 4rem; text-align:center; }
+  .footer-seal{ width:52px; height:52px; margin:0 auto 2rem; border:1.5px solid var(--seal); color:var(--seal); border-radius:3px; display:flex; align-items:center; justify-content:center; font-family:var(--display); font-size:1.2rem; font-weight:700; transform:rotate(-3deg); }
+  footer h2{ font-family:var(--display); font-size:clamp(1.8rem, 5vw, 2.8rem); font-weight:600; margin-bottom:1.6rem; }
+  .footer-links{ display:flex; justify-content:center; gap:2.2rem; flex-wrap:wrap; margin-top:2rem; font-family:var(--mono); font-size:0.8rem; }
+  .footer-links a{ color:var(--ink-soft); border-bottom:1px solid transparent; }
+  .footer-links a:hover{ color:var(--seal); border-bottom-color:var(--seal); }
+  .footer-note{ margin-top:4rem; font-family:var(--mono); font-size:0.68rem; color:var(--ink-soft); opacity:0.6; letter-spacing:0.08em; }
+</style>
+</head>
+<body>
+
+  <div class="rail left"><span>ABIGAIL YIN-CHUN CHAN · 陳彦臻</span></div>
+  <div class="rail right"><span>静 · 間 · 素 — QUIET / SPACE / PLAIN</span></div>
+
+  <nav>
+    <div class="nav-mark">陳</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#volunteer">Volunteer</a>
+      <a href="#research">Research</a>
+      <a href="#awards">Awards</a>
+      <a href="#education">Education</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- HERO -->
+    <header class="hero">
+      <canvas id="circuit" class="hero-canvas"></canvas>
+      <div class="hero-content">
+        <div class="hero-eyebrow">Portfolio · 2026</div>
+        <div class="hero-name-row">
+          <h1>Abigail<br>Yin-Chun Chan <span class="cjk">陳彦臻</span></h1>
+          <div class="seal">陳</div>
+        </div>
+        <p class="hero-role">Incoming Software Engineering student at the University of Waterloo. Researcher in neural signal processing and brain-computer interfaces, with a parallel life in competitive swimming, music, and community service.</p>
+        <div class="hero-meta">
+          <a href="mailto:abigailyinchunchan.personal@gmail.com">abigailyinchunchan.personal@gmail.com</a>
+          <a href="tel:+15194968173">(519) 496-8173</a>
+          <a href="#">Ontario, Canada</a>
+        </div>
+        <div class="terminal"><span class="prompt-text" id="terminalLine">&gt; whoami</span><span class="cursor"></span></div>
+      </div>
+    </header>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="section-head reveal">
+        <span class="glyph">素</span>
+        <span class="section-title">About</span>
+        <span class="section-num">01</span>
+      </div>
+      <p class="about-text reveal">
+        I'm heading into <strong>Software Engineering at the University of Waterloo</strong> this fall,
+        coming from four years of independent research at the intersection of neuroscience and computing —
+        building brain-computer interfaces, EEG-guided diagnostic tools, and most recently a system for
+        planning neurosurgical trajectories. Alongside that, I spent a summer at <strong>Nokia</strong> as one
+        of thirty youth selected nationally for their Future Tech program, and I've volunteered for years as
+        a newsletter editor, hospital volunteer, and STEM coach in my community. I compete competitively in
+        swimming and hold Level 10 RCM certification in piano — I like to keep one foot in something quiet
+        and precise, and one foot in something that moves fast.
+      </p>
+    </section>
+
+    <!-- WORK EXPERIENCE -->
+    <section id="experience">
+      <div class="section-head reveal">
+        <span class="glyph">職</span>
+        <span class="section-title">Work Experience</span>
+        <span class="section-num">02</span>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">07/2025 – 08/2025</div>
+        <div>
+          <div class="entry-title">Nokia Future Tech Summer Intern</div>
+          <div class="entry-org">Virtual, Ottawa, Ontario</div>
+          <ul>
+            <li>One of 30 youth selected across Canada for the 2025 Nokia Future Tech Summer program; worked as a paid intern with the network intelligence and automation team.</li>
+            <li>Produced a build delta tool to collect information from branches, packages, and build dependencies of Nokia's Network Service Platform (NSP) software builds.</li>
+            <li>Proposed a hash-map–based solution, resulting in a six-fold improvement in efficiency of the delta analysis function.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOLUNTEER -->
+    <section id="volunteer">
+      <div class="section-head reveal">
+        <span class="glyph">奉</span>
+        <span class="section-title">Volunteer Experience</span>
+        <span class="section-num">03</span>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">09/2024 – current</div>
+        <div>
+          <div class="entry-title">Newsletter Chief Editor</div>
+          <div class="entry-org">Region of Waterloo Swim Club (ROW), Waterloo, Ontario</div>
+          <ul>
+            <li>Founded and launched the club's monthly newsletter in September 2024.</li>
+            <li>Directly involved in internal club processes to keep the swim community informed and engaged.</li>
+            <li>Collected key updates from coaches and meet results from the Swim Canada website for event highlights.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">05/2024 – current</div>
+        <div>
+          <div class="entry-title">WRHN Certified Volunteer</div>
+          <div class="entry-org">Grand River Hospital, Kitchener, Ontario</div>
+          <ul>
+            <li>Received training in emergency procedures, code protocol, and patient assistance.</li>
+            <li>Over 40+ hours directly assisting patients in locating services, including helping elderly patients with renal dialysis weigh-ins.</li>
+            <li>Delivered equipment to hospital staff and packages to in-patients.</li>
+            <li>Collaborated with hospital staff and stationed volunteers to provide patients with support and clear guidance during their visits.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">09/2024 – current</div>
+        <div>
+          <div class="entry-title">Coach</div>
+          <div class="entry-org">Technovation Girls, Waterloo, Ontario</div>
+          <ul>
+            <li>Supported participants in brainstorming, developing, and building prototype apps addressing daily problems.</li>
+            <li>Led a coding workshop guiding participants through building decision trees in their apps.</li>
+            <li>Conducted administrative work to improve communication between mentors and participants.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">01/2023 – current</div>
+        <div>
+          <div class="entry-title">Executive Member</div>
+          <div class="entry-org">Science Club, Laurel Heights Secondary School, Waterloo, Ontario</div>
+          <ul>
+            <li>Increased participation by 30% for the 2024 Waterloo Wellington Science Fair.</li>
+            <li>Supported 5 members in achieving eligibility for the 2024 Canada-Wide Science and Engineering Fair (CWSEF).</li>
+            <li>Led bi-weekly workshops on STEM topics and project development, engaging over 50 regular participants.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">08/2024</div>
+        <div>
+          <div class="entry-title">Alumni</div>
+          <div class="entry-org">Quantum School for Young Students (QSYS), Virtual at University of Waterloo</div>
+          <ul>
+            <li>One of 200 students accepted into the QSYS program.</li>
+            <li>Studied the impact of quantum phenomena — superposition, entanglement — on computing, imaging, and cryptography.</li>
+            <li>Received consultation from world-leading quantum researchers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">08/2022</div>
+        <div>
+          <div class="entry-title">School Newspaper Columnist &amp; Copy Editor</div>
+          <div class="entry-org">McMaster University, Hamilton, Ontario</div>
+          <ul>
+            <li>Completed a two-week training course and conducted research on sustainable app development and biotechnology applications in healthcare.</li>
+            <li>Built a healthcare app, Focus, offering cognitive games to promote physical activity and strategic thinking for individuals with Parkinson's disease.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">09/2020 – 09/2024</div>
+        <div>
+          <div class="entry-title">Teens Engagement Team Executive Member</div>
+          <div class="entry-org">Social Venture Partners, Waterloo, Ontario</div>
+          <ul>
+            <li>Developed pitch ideas for the annual charity pitch event.</li>
+            <li>Brainstormed and developed team-bonding activities to build relationships between team members.</li>
+            <li>Created social media content encouraging sponsors, donors, and participants for the annual charity pitch event.</li>
+            <li>Helped raise more than $3,000 for Send 'Em Off Smiling, providing school supplies and clothing for local children in need.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH -->
+    <section id="research">
+      <div class="section-head reveal">
+        <span class="glyph">究</span>
+        <span class="section-title">Research</span>
+        <span class="section-num">04</span>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">07/2026 – current</div>
+        <div>
+          <div class="entry-title">Multi-modal EEG-MRI Mask R-CNN for Automated Segmentation of Neural Pathways and Cortical Parcels</div>
+          <ul>
+            <li>Developing an efficient, field-applicable algorithm intended to replace MER interpretation performed during DBS surgery and reduce the standard deviation of electrode placements.</li>
+            <li>Computes surgical pathways to targeted points, identifying optimal entry points on the brain surface while penalizing highly active EEG or functionally critical regions to minimize patient risk.</li>
+            <li>Developed a user interface allowing clinicians and researchers to interactively select brain regions and visualize resulting trajectories in 3D.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">08/2024 – 09/2025</div>
+        <div>
+          <div class="entry-title">Eq-PRISM: EEG-Quantum Integrated Support Model for Parkinson's Diagnosis and Recovery</div>
+          <ul>
+            <li>Ingenious+ Regional Winner, 2024.</li>
+            <li>A people-centered system providing accurate, affordable, and accessible diagnostic and treatment solutions for PD patients, removing barriers like high cost, radiation exposure, and accessibility.</li>
+            <li>Uses a quantum convolutional neural network (QCNN) analyzing EEG biomarkers to distinguish PD from healthy cases at 90% accuracy.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">09/2023 – 09/2024</div>
+        <div>
+          <div class="entry-title">Decoding Brain Waves using an Electroencephalogram-Controlled BCI</div>
+          <ul>
+            <li>Canada-Wide Science Fair (Ottawa, ON, 2024): Silver Medal, Youth Can Innovate Award.</li>
+            <li>Built an affordable, accessible, non-invasive brain-computer interface classifying motor commands from real-time EEG to control a six-degrees-of-freedom bionic arm.</li>
+            <li>Collected and preprocessed EEG data, extracted significant electrode values, and analyzed motor-imagery patterns at 91% accuracy.</li>
+            <li>Achieved accurate classification from a 40-minute training dataset, cutting required training time by 360 minutes.</li>
+            <li>Enabled individuals with permanent neurological conditions and spinal cord injuries to regain control over their environment.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-date">09/2021 – 09/2023</div>
+        <div>
+          <div class="entry-title">Regulating Digital Eye Strain using Structural Similarity Index</div>
+          <ul>
+            <li>Canada-Wide Science Fair (Fredericton, NB, 2022): Gold Medal.</li>
+            <li>Developed a practical Python application for proactive eye care, distinguishing early symptoms (red eye, dry eye, subconjunctival hemorrhage, glaucoma) caused by digital eye strain.</li>
+            <li>Built a 157-image dataset and applied Structural Similarity Index Measure (SSIM) for classification, achieving 89% accuracy across age and gender.</li>
+            <li>Identified detection challenges in younger demographics, highlighting a need for further pediatric eye-care research.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- AWARDS -->
+    <section id="awards">
+      <div class="section-head reveal">
+        <span class="glyph">賞</span>
+        <span class="section-title">Awards &amp; Honors</span>
+        <span class="section-num">05</span>
+      </div>
+
+      <details class="award-group reveal">
+        <summary><span class="plus">+</span> Science &amp; Engineering <span class="count">10 entries</span></summary>
+        <div class="award-body">
+          <div class="award-row"><div><div class="award-name">Canada-Wide Science Fair — Intermediate Division: ThinkNet</div><div class="award-detail">Decoding Brain Waves using an EEG-controlled BCI — Silver Medallion, Youth Can Innovate Award, $750 cash prize, $2,000 Western University &amp; $4,000 Mount Allison University scholarships</div></div><div class="award-meta">2024</div></div>
+          <div class="award-row"><div><div class="award-name">Canada-Wide Science Fair — Junior Division</div><div class="award-detail">Regulating Digital Eye Strain using SSIM — Gold Medallion, $4,000 Western University scholarship</div></div><div class="award-meta">2022</div></div>
+          <div class="award-row"><div><div class="award-name">Waterloo Wellington Regional Science &amp; Engineering Fair — Senior Division</div><div class="award-detail">Gold Medallion, $1,000 scholarships each from Waterloo, Laurier &amp; Guelph</div></div><div class="award-meta">2026</div></div>
+          <div class="award-row"><div><div class="award-name">Waterloo Wellington Regional Science &amp; Engineering Fair — Senior Division</div><div class="award-detail">Gold Medallion, $1,000 scholarships each from Waterloo, Laurier &amp; Guelph</div></div><div class="award-meta">2025</div></div>
+          <div class="award-row"><div><div class="award-name">Waterloo Wellington Regional Science &amp; Engineering Fair — Intermediate Division</div><div class="award-detail">Gold Medallion, $150 cash prize, $750 SHAD scholarship, Award of Merit</div></div><div class="award-meta">2024</div></div>
+          <div class="award-row"><div><div class="award-name">Waterloo Wellington Regional Science &amp; Engineering Fair — Intermediate Division</div><div class="award-detail">Gold Medallion, $100 cash prize, $500 SHAD scholarship</div></div><div class="award-meta">2023</div></div>
+          <div class="award-row"><div><div class="award-name">Waterloo Wellington Regional Science &amp; Engineering Fair — Junior Division</div><div class="award-detail">Gold Medallion, $80 cash prize, $500 SHAD scholarship, Award of Merit</div></div><div class="award-meta">2022</div></div>
+          <div class="award-row"><div><div class="award-name">Technovation Girls Canada Challenge</div><div class="award-detail">National Semifinalist, Waterloo Chapter Grand Prize Winner</div></div><div class="award-meta">2025</div></div>
+          <div class="award-row"><div><div class="award-name">Technovation Girls Canada Challenge</div><div class="award-detail">Waterloo Chapter Grand Prize Winner</div></div><div class="award-meta">2024</div></div>
+          <div class="award-row"><div><div class="award-name">Technovation Girls Canada Challenge</div><div class="award-detail">Waterloo Chapter Best Pitch Award</div></div><div class="award-meta">2023</div></div>
+          <div class="award-row"><div><div class="award-name">Canadian Youth Science Conference</div><div class="award-detail">Gold Award, Grand Prize Winner, $500 SHAD scholarship</div></div><div class="award-meta">2024</div></div>
+        </div>
+      </details>
+
+      <details class="award-group reveal">
+        <summary><span class="plus">+</span> Mathematics <span class="count">7 entries</span></summary>
+        <div class="award-body">
+          <div class="award-row"><div><div class="award-name">Canadian Senior Mathematics Contest</div><div class="award-detail">Certificate of Distinction — Top 25%</div></div><div class="award-meta">2025</div></div>
+          <div class="award-row"><div><div class="award-name">Fryer Contest</div><div class="award-detail">Certificate of Distinction — Top 25%</div></div><div class="award-meta">2025</div></div>
+          <div class="award-row"><div><div class="award-name">Cayley Contest</div><div class="award-detail">Certificate of Distinction — Score 126, Top 25%</div></div><div class="award-meta">2024</div></div>
+          <div class="award-row"><div><div class="award-name">Galois Contest</div><div class="award-detail">Certificate of Distinction — Group V, Score 31</div></div><div class="award-meta">2024</div></div>
+          <div class="award-row"><div><div class="award-name">Canadian Intermediate Mathematics Contest (CIMC)</div><div class="award-detail">Certificate of Distinction — Score 47, Top 25% of 8,450 participants (National Average 30.1)</div></div><div class="award-meta">2022</div></div>
+          <div class="award-row"><div><div class="award-name">Pascal Contest</div><div class="award-detail">Certificate of Distinction — Score 132, Top 25%</div></div><div class="award-meta">2022 – 23</div></div>
+          <div class="award-row"><div><div class="award-name">Gauss Contest</div><div class="award-detail">Certificate of Distinction — Score 127, Top 25%</div></div><div class="award-meta">2022</div></div>
+        </div>
+      </details>
+
+      <details class="award-group reveal">
+        <summary><span class="plus">+</span> Grants <span class="count">3 entries</span></summary>
+        <div class="award-body">
+          <div class="award-row"><div><div class="award-name">Youth Creativity Fund</div><div class="award-detail">$500 individual entry grant</div></div><div class="award-meta">2025</div></div>
+          <div class="award-row"><div><div class="award-name">Ingenious+ Regional Award — EEG-Quantum Integrated Support Model for Parkinson's Diagnosis and Recovery</div><div class="award-detail">$1,000 cash prize</div></div><div class="award-meta">2025</div></div>
+          <div class="award-row"><div><div class="award-name">Ingenious+ Regional Award — EM-PATH: EEG-MRI Brain Models for Automated Computation of Neurosurgical Trajectories</div><div class="award-detail">$1,000 cash prize</div></div><div class="award-meta">2026</div></div>
+          <div class="award-row"><div><div class="award-name">Sprout Ideas Fellowship — Beyond the Blocks</div><div class="award-detail">$5,000 grant; organized elite swimmers (14–18) to mentor junior ROW athletes (13 and under) through development workshops, building confidence, team bonding, and passing down ROW values across generations of swimmers</div></div><div class="award-meta">—</div></div>
+        </div>
+      </details>
+
+      <details class="award-group reveal">
+        <summary><span class="plus">+</span> Athletics <span class="count">4 entries</span></summary>
+        <div class="award-body">
+          <div class="award-row"><div><div class="award-name">Most Valued Swimmer</div></div><div class="award-meta">2018 – 19</div></div>
+          <div class="award-row"><div><div class="award-name">Ontario Open Water Championships — 17&amp;O Division, 1000m</div><div class="award-detail">Bronze Medalist</div></div><div class="award-meta">—</div></div>
+          <div class="award-row"><div><div class="award-name">Most Spirited Award</div></div><div class="award-meta">2024 – 25</div></div>
+          <div class="award-row"><div><div class="award-name">Senior Athlete of the Year</div></div><div class="award-meta">2024 – 25</div></div>
+        </div>
+      </details>
+
+      <details class="award-group reveal">
+        <summary><span class="plus">+</span> Writing <span class="count">3 entries</span></summary>
+        <div class="award-body">
+          <div class="award-row"><div><div class="award-name">Laurel Heights Secondary School Editor's Award for The Forecast</div><div class="award-detail">In recognition of 3 years of membership and contributions</div></div><div class="award-meta">2025</div></div>
+          <div class="award-row"><div><div class="award-name">My Canada Project Competition</div><div class="award-detail">Third place</div></div><div class="award-meta">2022</div></div>
+          <div class="award-row"><div><div class="award-name">Polar Expressions Publishing National Short Story Writing Competition</div><div class="award-detail">National Champion — 1st place</div></div><div class="award-meta">2021</div></div>
+        </div>
+      </details>
+
+      <details class="award-group reveal">
+        <summary><span class="plus">+</span> Music <span class="count">3 entries</span></summary>
+        <div class="award-body">
+          <div class="award-row"><div><div class="award-name">Waterloo Kiwanis Music Festival Provincials Delegate</div></div><div class="award-meta">2021</div></div>
+          <div class="award-row"><div><div class="award-name">Ontario Music Festival Association (OMFA) Niagara Provincials Competition</div><div class="award-detail">Honorable Mention</div></div><div class="award-meta">2019</div></div>
+          <div class="award-row"><div><div class="award-name">Waterloo Kiwanis Music Festival Provincials Delegate</div></div><div class="award-meta">2019</div></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education">
+      <div class="section-head reveal">
+        <span class="glyph">学</span>
+        <span class="section-title">Education</span>
+        <span class="section-num">06</span>
+      </div>
+
+      <div class="edu-item reveal">
+        <div>
+          <div class="edu-degree">Bachelor of Software Engineering</div>
+          <div class="edu-school">University of Waterloo, Waterloo, Ontario</div>
+        </div>
+        <div class="edu-date">09/2026 – current</div>
+      </div>
+      <div class="edu-item reveal">
+        <div>
+          <div class="edu-degree">Ontario Secondary School Diploma (OSSD)</div>
+          <div class="edu-school">Laurel Heights Secondary School, Waterloo, Ontario</div>
+          <ul>
+            <li>Ross A. Cruickshank Memorial Commencement Award — $100 scholarship and certificate of recognition, awarded to one male and one female student demonstrating outstanding leadership within the school and region.</li>
+            <li>Minister's Gold Certificate of Recognition for Community Involvement — 200+ hours of service.</li>
+          </ul>
+        </div>
+        <div class="edu-date">09/2022 – 09/2026</div>
+      </div>
+    </section>
+
+    <!-- SKILLS / ADDITIONAL -->
+    <section id="skills">
+      <div class="section-head reveal">
+        <span class="glyph">技</span>
+        <span class="section-title">Skills &amp; Additional Information</span>
+        <span class="section-num">07</span>
+      </div>
+
+      <div class="skill-groups">
+        <div>
+          <div class="skill-group-label">Technical</div>
+          <div class="skill-list">
+            <span><span class="hl">Python</span> · <span class="hl">Swift</span> app development · Thunkable</span>
+            <span>Signal data analysis — <span class="hl">OpenBCI</span>, <span class="hl">Neuropype</span></span>
+            <span>AI &amp; neural net development — <span class="hl">TensorFlow</span></span>
+            <span>Biosensing equipment operation &amp; maintenance</span>
+            <span>Scientific writing &amp; research</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Certifications</div>
+          <div class="skill-list">
+            <span>RCM Level 10 Certification (Piano)</span>
+            <span>Standard First Aid + CPR C</span>
+            <span>Bronze Cross Lifeguard</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Languages</div>
+          <div class="skill-list">
+            <span>English — Fluent</span>
+            <span>Cantonese — Intermediate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- CONTACT / FOOTER -->
+  <footer id="contact">
+    <div class="footer-seal">陳</div>
+    <h2>Let's connect.</h2>
+    <div class="footer-links">
+      <a href="mailto:abigailyinchunchan.personal@gmail.com">Email</a>
+      <a href="tel:+15194968173">Phone</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">GitHub</a>
+    </div>
+    <div class="footer-note">© 2026 ABIGAIL YIN-CHUN CHAN — ONTARIO, CANADA</div>
+  </footer>
+
+  <script>
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---- scroll reveal + code-decrypt title effect ---- */
+    const scrambleChars = "01アイウエオカキクケコ<>{}/+=;_".split('');
+    function scramble(el){
+      const original = el.textContent;
+      let iterations = 0;
+      const interval = setInterval(()=>{
+        el.textContent = original.split('').map((ch, idx)=>{
+          if (ch === ' ') return ' ';
+          if (idx < iterations) return original[idx];
+          return scrambleChars[Math.floor(Math.random()*scrambleChars.length)];
+        }).join('');
+        iterations += 1;
+        if (iterations > original.length){
+          clearInterval(interval);
+          el.textContent = original;
+        }
+      }, 35);
+    }
+
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          if (!reducedMotion){
+            const glyph = e.target.querySelector('.glyph');
+            const title = e.target.querySelector('.section-title');
+            if (glyph) scramble(glyph);
+            if (title) scramble(title);
+          }
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    els.forEach(el => io.observe(el));
+
+    /* ---- hero circuit — a quiet constellation that leans toward the cursor ---- */
+    function initCircuit(){
+      const canvas = document.getElementById('circuit');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const host = canvas.parentElement;
+      let w, h, dots = [];
+      let mouse = { x: -9999, y: -9999 };
+
+      function resize(){
+        w = canvas.width = host.offsetWidth;
+        h = canvas.height = host.offsetHeight;
+        const count = Math.min(70, Math.floor((w * h) / 16000));
+        dots = Array.from({ length: count }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.18
+        }));
+      }
+
+      host.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
+      host.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+      function frame(){
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < dots.length; i++){
+          const d = dots[i];
+          d.x += d.vx; d.y += d.vy;
+          if (d.x < 0 || d.x > w) d.vx *= -1;
+          if (d.y < 0 || d.y > h) d.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, 1.3, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(32,31,29,0.3)';
+          ctx.fill();
+
+          for (let j = i + 1; j < dots.length; j++){
+            const o = dots[j];
+            const dx = d.x - o.x, dy = d.y - o.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 110){
+              ctx.beginPath();
+              ctx.moveTo(d.x, d.y);
+              ctx.lineTo(o.x, o.y);
+              ctx.strokeStyle = `rgba(91,86,76,${0.14 * (1 - dist / 110)})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+
+          const mdx = d.x - mouse.x, mdy = d.y - mouse.y;
+          const mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+          if (mdist < 160){
+            ctx.beginPath();
+            ctx.moveTo(d.x, d.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(166,59,46,${0.3 * (1 - mdist / 160)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+        if (!reducedMotion) requestAnimationFrame(frame);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      frame();
+    }
+
+    /* ---- terminal typewriter — a little proof of life in the hero ---- */
+    function initTerminal(){
+      const el = document.getElementById('terminalLine');
+      if (!el) return;
+      const pairs = [
+        ["whoami", "Abigail Yin-Chun Chan"],
+        ["cat focus.txt", "EEG · BCI · neural signal processing"],
+        ["echo $FALL_2026", "Software Engineering @ University of Waterloo"]
+      ];
+
+      if (reducedMotion){
+        el.textContent = "> " + pairs[0][0];
+        return;
+      }
+
+      let p = 0;
+      function typeText(text, prefix, done){
+        let i = 0;
+        const t = setInterval(() => {
+          el.textContent = prefix + text.slice(0, i + 1);
+          i++;
+          if (i >= text.length){ clearInterval(t); done(); }
+        }, 45);
+      }
+      function eraseText(done){
+        let text = el.textContent;
+        const t = setInterval(() => {
+          text = text.slice(0, -1);
+          el.textContent = text;
+          if (text.length === 0){ clearInterval(t); done(); }
+        }, 20);
+      }
+      function loop(){
+        const [cmd, out] = pairs[p];
+        typeText(cmd, "> ", () => {
+          setTimeout(() => {
+            typeText(out, "", () => {
+              setTimeout(() => {
+                eraseText(() => {
+                  p = (p + 1) % pairs.length;
+                  loop();
+                });
+              }, 1500);
+            });
+          }, 400);
+        });
+      }
+      loop();
+    }
+
+    initCircuit();
+    initTerminal();
+  </script>
+
+</body>
+</html>
