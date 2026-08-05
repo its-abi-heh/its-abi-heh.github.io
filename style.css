@@ -170,16 +170,21 @@
       gap:1.5rem;
   }
   
-  
-  .project-media iframe,
-  .project-media video{
-      width:100%;
-      max-width:800px;
-      aspect-ratio:16/9;
-      border:1px solid var(--line);
+  .project-media iframe{
+  width:100%;
+  max-width:800px;
+  border:1px solid var(--line);
   }
   
+  .project-media iframe[src$=".pdf"]{
+  aspect-ratio:auto;
+  height:900px;
+  }
   
+  .project-media iframe:not([src$=".pdf"]){
+  aspect-ratio:16/9;
+  }
+
   .project-links{
       display:flex;
       gap:2rem;
